@@ -1,0 +1,77 @@
+﻿@page "/people"
+@inject HttpClient Http
+
+<PageTitle>People</PageTitle>
+
+<h1>All People</h1>
+
+<p>This component fetches all people from the DevTest API.</p>
+
+@if (people == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Organization ID</th>
+                <th>External Person ID</th>
+                <th>First Name</th>
+                <th>Last Name</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var person in people)
+            {
+                <tr>
+                    <td>@person.id</td>
+                    <td>@person.organizationId</td>
+                    <td>@person.externalPersonId</td>
+                    <td>@person.firstName</td>
+                    <td>@person.lastName</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    private Person[]? people;
+
+    protected override async Task OnInitializedAsync()
+    {
+        people = await Http.GetFromJsonAsync<Person[]>("http://localhost:5066/api/People");
+    }
+
+    public class Person
+    {
+        public int id { get; set; }
+
+        public int organizationId { get; set; }
+
+        public string externalPersonId { get; set; }
+
+        public string suffix { get; set; }
+
+        public string firstName { get; set; }
+
+        public string middle { get; set; }
+
+        public string lastName { get; set; }
+
+        public object organization { get; set; }
+
+        public object[] email { get; set; }
+
+        public object[] phone { get; set; }
+
+        //public Organization Organization { get; set; }
+
+        //public List<Email> Email { get; set; }
+
+        //public List<Phone> Phone { get; set; }
+    }
+}
